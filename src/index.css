@@ -44,6 +44,12 @@
 }
 
 @layer base {
+  /* Skip layout/paint for off-screen sections (main thread + scroll jank). */
+  main > section:not(#hero) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 520px;
+  }
+
   html {
     scroll-behavior: smooth;
   }

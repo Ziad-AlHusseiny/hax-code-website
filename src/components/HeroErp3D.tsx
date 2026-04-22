@@ -1,4 +1,4 @@
-import { useRef, type ReactNode } from 'react'
+import { useEffect, useRef, type ReactNode } from 'react'
 import {
   motion,
   useMotionValue,
@@ -21,7 +21,7 @@ function WindowChrome({
 }) {
   return (
     <div
-      className={`overflow-hidden rounded-lg border border-white/[0.09] bg-gradient-to-b from-white/[0.07] to-white/[0.02] shadow-[0_18px_50px_rgba(0,0,0,0.5)] backdrop-blur-[6px] ${className}`}
+      className={`overflow-hidden rounded-lg border border-white/[0.09] bg-gradient-to-b from-white/[0.07] to-white/[0.02] shadow-[0_18px_50px_rgba(0,0,0,0.5)] backdrop-blur-[3px] ${className}`}
     >
       <div className="flex items-center gap-2 border-b border-white/[0.08] px-3 py-1.5">
         <span className="flex gap-1">
@@ -40,6 +40,8 @@ function WindowChrome({
 
 export function HeroErp3D({ locale }: Props) {
   const wrapRef = useRef<HTMLDivElement>(null)
+  const rafRef = useRef(0)
+  const pendingRef = useRef({ x: 0.5, y: 0.5 })
   const reduced = useReducedMotion()
   const mx = useMotionValue(0.5)
   const my = useMotionValue(0.5)
@@ -53,14 +55,34 @@ export function HeroErp3D({ locale }: Props) {
     { stiffness: 120, damping: 28, mass: 0.4 },
   )
 
+  useEffect(
+    () => () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current)
+    },
+    [],
+  )
+
   function onMove(e: React.MouseEvent) {
     if (reduced || !wrapRef.current) return
     const r = wrapRef.current.getBoundingClientRect()
-    mx.set((e.clientX - r.left) / r.width)
-    my.set((e.clientY - r.top) / r.height)
+    pendingRef.current = {
+      x: (e.clientX - r.left) / r.width,
+      y: (e.clientY - r.top) / r.height,
+    }
+    if (rafRef.current) return
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = 0
+      const { x, y } = pendingRef.current
+      mx.set(x)
+      my.set(y)
+    })
   }
 
   function onLeave() {
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current)
+      rafRef.current = 0
+    }
     mx.set(0.5)
     my.set(0.5)
   }

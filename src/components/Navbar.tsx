@@ -23,7 +23,7 @@ export function Navbar() {
   return (
     <header
       data-testid="site-header"
-      className="section-accent-top fixed inset-x-0 top-0 z-50 border-b border-black/[0.06] bg-paper-50/92 backdrop-blur-xl dark:border-white/[0.08] dark:bg-ink-950/92"
+      className="section-accent-top fixed inset-x-0 top-0 z-50 border-b border-black/[0.06] bg-paper-50/95 backdrop-blur-md dark:border-white/[0.08] dark:bg-ink-950/95 supports-[backdrop-filter]:bg-paper-50/88 supports-[backdrop-filter]:dark:bg-ink-950/88"
     >
       <div
         className="mx-auto flex h-[3.75rem] max-w-[1280px] items-center gap-3 px-4 md:h-16 md:px-6"

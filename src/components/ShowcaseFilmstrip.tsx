@@ -57,7 +57,7 @@ export function ShowcaseFilmstrip() {
       {
         root,
         rootMargin: '-32% 0px -32% 0px',
-        threshold: [0.2, 0.35, 0.5, 0.65, 0.8],
+        threshold: [0.35, 0.55, 0.75],
       },
     )
 
@@ -134,7 +134,7 @@ export function ShowcaseFilmstrip() {
               <button
                 type="button"
                 onClick={scrollPrev}
-                className="flex size-10 items-center justify-center rounded-full border border-black/[0.08] bg-white/90 text-text-on-light shadow-md backdrop-blur-md transition hover:border-brand-500/40 hover:bg-brand-500/10 dark:border-white/[0.12] dark:bg-ink-900/90 dark:text-text-on-dark dark:hover:bg-brand-500/15 md:size-11"
+                className="flex size-10 items-center justify-center rounded-full border border-black/[0.08] bg-white/95 text-text-on-light shadow-md transition hover:border-brand-500/40 hover:bg-brand-500/10 dark:border-white/[0.12] dark:bg-ink-900/95 dark:text-text-on-dark dark:hover:bg-brand-500/15 md:size-11"
                 aria-label={isAr ? 'السابق' : 'Previous'}
               >
                 <ChevronLeft
@@ -145,7 +145,7 @@ export function ShowcaseFilmstrip() {
               <button
                 type="button"
                 onClick={scrollNext}
-                className="flex size-10 items-center justify-center rounded-full border border-black/[0.08] bg-white/90 text-text-on-light shadow-md backdrop-blur-md transition hover:border-brand-500/40 hover:bg-brand-500/10 dark:border-white/[0.12] dark:bg-ink-900/90 dark:text-text-on-dark dark:hover:bg-brand-500/15 md:size-11"
+                className="flex size-10 items-center justify-center rounded-full border border-black/[0.08] bg-white/95 text-text-on-light shadow-md transition hover:border-brand-500/40 hover:bg-brand-500/10 dark:border-white/[0.12] dark:bg-ink-900/95 dark:text-text-on-dark dark:hover:bg-brand-500/15 md:size-11"
                 aria-label={isAr ? 'التالي' : 'Next'}
               >
                 <ChevronRight
@@ -203,7 +203,11 @@ export function ShowcaseFilmstrip() {
                       scale: isActive ? 1 : 0.9,
                       opacity: isActive ? 1 : 0.55,
                     }}
-                    transition={{ type: 'spring', stiffness: 320, damping: 28 }}
+                    transition={{
+                      type: 'tween',
+                      duration: 0.22,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
                     className="group w-[min(84vw,680px)] md:w-[min(76vw,720px)]"
                   >
                     <div
@@ -219,14 +223,22 @@ export function ShowcaseFilmstrip() {
                           className="pointer-events-none absolute inset-2 rounded-lg shadow-[inset_0_1px_0_rgba(255,255,255,0.06),inset_0_0_0_1px_rgba(0,0,0,0.04)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.04),inset_0_0_0_1px_rgba(255,255,255,0.05)]"
                           aria-hidden
                         />
-                        <img
-                          src={`${import.meta.env.BASE_URL}showcase/${slide.file}`}
-                          alt={isAr ? slide.titleAr : slide.titleEn}
-                          loading={i < 2 ? 'eager' : 'lazy'}
-                          decoding="async"
-                          draggable={false}
-                          className="relative z-[1] h-full w-full object-contain object-center p-3 md:p-4"
-                        />
+                        <picture>
+                          <source
+                            type="image/webp"
+                            srcSet={`${import.meta.env.BASE_URL}showcase/${slide.file.replace(/\.png$/i, '.webp')}`}
+                          />
+                          <img
+                            src={`${import.meta.env.BASE_URL}showcase/${slide.file}`}
+                            alt={isAr ? slide.titleAr : slide.titleEn}
+                            loading={i < 2 ? 'eager' : 'lazy'}
+                            decoding="async"
+                            draggable={false}
+                            sizes="(max-width: 768px) 84vw, min(76vw, 720px)"
+                            fetchPriority={i === 0 ? 'high' : undefined}
+                            className="relative z-[1] h-full w-full object-contain object-center p-3 md:p-4"
+                          />
+                        </picture>
                       </div>
                       <div className="relative border-t border-black/[0.06] bg-gradient-to-r from-paper-50/95 via-white/90 to-paper-50/95 px-4 py-3.5 dark:border-white/[0.08] dark:from-surface-dark-2/95 dark:via-surface-dark-1/95 dark:to-surface-dark-2/95">
                         <p className="text-pretty font-alexandria text-[0.9375rem] font-semibold leading-snug text-text-on-light dark:text-text-on-dark">
