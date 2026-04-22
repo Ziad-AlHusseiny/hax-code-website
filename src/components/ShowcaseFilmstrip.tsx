@@ -220,7 +220,7 @@ export function ShowcaseFilmstrip() {
                           aria-hidden
                         />
                         <img
-                          src={`/showcase/${slide.file}`}
+                          src={`${import.meta.env.BASE_URL}showcase/${slide.file}`}
                           alt={isAr ? slide.titleAr : slide.titleEn}
                           loading={i < 2 ? 'eager' : 'lazy'}
                           decoding="async"
